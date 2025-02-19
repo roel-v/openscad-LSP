@@ -1,0 +1,29 @@
+name: Build on Windows
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      # If you want to explicitly use the MSVC toolchain, add:
+      # - name: Add MSVC Rust target (optional)
+      #   run: rustup default stable-x86_64-pc-windows-msvc
+
+      - name: Build Release
+        run: cargo build --release
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: openscad-lsp-windows
+          path: target\release\openscad-lsp.exe
